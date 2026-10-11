@@ -17,15 +17,11 @@ export const Navbar: React.FC = () => {
         </Link>
 
         <nav className="nav-links">
-          <Link to="/">Inicio</Link>
-          <Link to="/reserva">Experiencias</Link>
-          <Link to="/reserva">Alojamientos</Link>
-          <Link to="/admin" className="btn-secondary">
-            Entrar como administrador
-          </Link>
-          <Link to="/reserva" className="btn-primary">
-            Reservar
-          </Link>
+            <Link to="/">Inicio</Link>
+            <Link to="/alojamientos">Alojamientos</Link>
+            <Link to="/experiencias">Experiencias</Link>
+            <Link to="/admin" className="btn-secondary">Entrar como administrador</Link>
+            <Link to="/reserva" className="btn-primary">Reservar</Link>
         </nav>
       </div>
     </header>
