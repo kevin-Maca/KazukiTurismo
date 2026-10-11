@@ -1,0 +1,91 @@
+/* Sidebar */
+.admin-sidebar {
+  width: 260px;
+  background-color: var(--primary-dark);
+  color: var(--white);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem;
+  border-radius: 6px;
+  color: #BAC7BE;
+  font-size: 0.9rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.admin-nav-item:hover,
+.admin-nav-item.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+  font-weight: 600;
+}
+
+/* Badges de Estado para la Tabla de Reservas */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-badge.confirmada {
+  background-color: #E8F5E9;
+  color: #2E7D32;
+}
+
+.status-badge.pendiente {
+  background-color: #FFF8E1;
+  color: #B78103;
+}
+
+.status-badge.cancelada {
+  background-color: #FFEBEE;
+  color: #C62828;
+}
+
+/* Tablas Administrativas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  padding: 0.75rem 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  letter-spacing: 0.5px;
+}
+
+td {
+  padding: 0.85rem 0.5rem;
+  border-bottom: 1px solid #F0F4F1;
+  font-size: 0.85rem;
+}
+
+/* Barra de Progreso de Control de Aforo */
+.aforo-bar-bg {
+  width: 100%;
+  background: #E0E0E0;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.aforo-bar-fill {
+  height: 100%;
+  background: var(--primary-dark);
+  border-radius: 4px;
+}
