@@ -10,6 +10,24 @@ export const Payment: React.FC = () => {
   const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState<'PSE' | 'CARD' | 'TRANSFER'>('PSE');
 
+    const selectedCabin =
+    accommodationsData.find(
+      (cabin) => cabin.id === sessionStorage.getItem('selectedCabinId')
+    ) ?? accommodationsData[0];
+
+  const visitors = Number(sessionStorage.getItem('visitors') ?? 2);
+  const checkInDate = sessionStorage.getItem('checkInDate') ?? '';
+  const checkOutDate = sessionStorage.getItem('checkOutDate') ?? '';
+
+  const nights =
+    checkInDate && checkOutDate
+      ? (Date.parse(`${checkOutDate}T00:00:00Z`) -
+          Date.parse(`${checkInDate}T00:00:00Z`)) /
+        86_400_000
+      : 1;
+
+  const total = selectedCabin.price * visitors * nights;
+
   const handlePayment = (): void => {
     sessionStorage.setItem('paymentMethod', paymentMethod);
     navigate('/reserva/confirmacion');
@@ -58,12 +76,18 @@ export const Payment: React.FC = () => {
           </div>
 
           <button onClick={handlePayment} className="btn-primary" style={{ width: '100%', padding: '0.85rem', background: '#1E382B' }}>
-            Pagar $ 320.000 COP 🔒
+            Pagar $ {total.toLocaleString()} COP 🔒
           </button>
         </div>
 
         <div>
-          <BookingSummaryCard visitors={2} selectedCabin={accommodationsData[0]} />
+          <BookingSummaryCard
+  visitors={visitors}
+  selectedCabin={selectedCabin}
+  checkInDate={checkInDate}
+  checkOutDate={checkOutDate}
+  nights={nights}
+/>
         </div>
       </div>
     </div>
