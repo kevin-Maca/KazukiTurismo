@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { LayoutDashboard, Calendar, Users, PieChart, Plus, CheckCircle, Clock, XCircle } from 'lucide-react';
+import { LayoutDashboard, Calendar, Users, PieChart, Plus } from 'lucide-react';
 import { mockReservations } from '../data/mockData';
 import type { Reservation } from '../types';
 import '../styles/admin.css';
