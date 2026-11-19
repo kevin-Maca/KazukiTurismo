@@ -3,6 +3,7 @@ import fechaDisponibleRoutes from './routes/fechaDisponibleRoutes';
 import express, { Application } from 'express';
 import cors from 'cors';
 import alojamientoRoutes from './routes/alojamientoRoutes';
+import authRoutes from './routes/authRoutes'
 
 const app: Application = express();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 // Rutas
 app.use('/api/alojamientos', alojamientoRoutes);
 app.use('/api/fechas-disponibles', fechaDisponibleRoutes);
+app.use('/api/auth', authRoutes);
 
 // Ruta principal
 app.get('/', (req, res) => {
