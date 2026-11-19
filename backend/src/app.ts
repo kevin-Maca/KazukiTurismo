@@ -1,4 +1,4 @@
-
+import reservaRoutes from './routes/reservaRoutes';
 import usuarioRoutes from './routes/usuarioRoutes';
 import fechaDisponibleRoutes from './routes/fechaDisponibleRoutes';
 import express, { Application } from 'express';
@@ -15,6 +15,7 @@ app.use(express.json());
 app.use('/api/alojamientos', alojamientoRoutes);
 app.use('/api/fechas-disponibles', fechaDisponibleRoutes);
 app.use('/api/usuarios', usuarioRoutes);
+app.use('/api/reservas', reservaRoutes);
 
 // Ruta principal
 app.get('/', (req, res) => {
