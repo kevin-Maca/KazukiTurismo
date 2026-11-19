@@ -1,4 +1,4 @@
-
+﻿
 /*
 ========================================================
  PROYECTO: KAZUKI TURISMO
@@ -54,6 +54,8 @@ BEGIN
         TipoDocumento NVARCHAR(30) NOT NULL,
         NumeroDocumento NVARCHAR(30) NOT NULL,
         Rol NVARCHAR(20) NOT NULL DEFAULT 'VISITANTE',
+        PasswordHash NVARCHAR(255) NULL,
+        Activo BIT NOT NULL DEFAULT 1,
         FechaRegistro DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
 
         CONSTRAINT UQ_Usuarios_Correo
@@ -224,7 +226,7 @@ END;
 GO
 
 /* ======================================================
-   7. VERIFICACIÓN DE TABLAS
+    7. VERIFICACION DE TABLAS
 ====================================================== */
 
 SELECT TABLE_NAME AS TablaCreada
@@ -235,7 +237,7 @@ ORDER BY TABLE_NAME;
 GO
 
 /* ======================================================
-   8. VERIFICACIÓN DE ALOJAMIENTOS
+   8. VERIFICACION DE ALOJAMIENTOS
 ====================================================== */
 
 SELECT
