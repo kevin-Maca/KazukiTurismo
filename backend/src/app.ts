@@ -1,4 +1,5 @@
 
+import usuarioRoutes from './routes/usuarioRoutes';
 import fechaDisponibleRoutes from './routes/fechaDisponibleRoutes';
 import express, { Application } from 'express';
 import cors from 'cors';
@@ -10,9 +11,10 @@ const app: Application = express();
 app.use(cors());
 app.use(express.json());
 
-// Rutas
+// Rutas de la API
 app.use('/api/alojamientos', alojamientoRoutes);
 app.use('/api/fechas-disponibles', fechaDisponibleRoutes);
+app.use('/api/usuarios', usuarioRoutes);
 
 // Ruta principal
 app.get('/', (req, res) => {
