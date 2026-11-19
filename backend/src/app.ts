@@ -1,4 +1,5 @@
-
+import reservaRoutes from './routes/reservaRoutes';
+import usuarioRoutes from './routes/usuarioRoutes';
 import fechaDisponibleRoutes from './routes/fechaDisponibleRoutes';
 import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
@@ -11,10 +12,12 @@ const app: Application = express();
 app.use(cors());
 app.use(express.json());
 
-// Rutas
+// Rutas de la API
 app.use('/api/alojamientos', alojamientoRoutes);
 app.use('/api/fechas-disponibles', fechaDisponibleRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/usuarios', usuarioRoutes);
+app.use('/api/reservas', reservaRoutes);
 
 // Ruta principal
 app.get('/', (req, res) => {
