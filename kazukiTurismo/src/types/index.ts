@@ -59,3 +59,23 @@ export interface CapacityConfig {
   reserved: number;
   available: number;
 }
+
+export type Rol = 'ADMIN' | 'VISITANTE';
+
+export interface Usuario {
+  id: number;
+  nombres: string;
+  apellidos: string;
+  correo: string;
+  rol: Rol;
+}
+
+export interface RegisterPayload {
+  nombres: string;
+  apellidos: string;
+  correo: string;
+  telefono: string;
+  tipoDocumento: string;
+  numeroDocumento: string;
+  password: string;
+}
