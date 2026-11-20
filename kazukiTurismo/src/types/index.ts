@@ -79,3 +79,18 @@ export interface RegisterPayload {
   numeroDocumento: string;
   password: string;
 }
+
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}
+
+export interface AlojamientoApi {
+  IdAlojamiento: number;
+  Nombre: string;
+  Descripcion: string | null;
+  PrecioPorPersonaNoche: number;
+  CapacidadMaxima: number;
+  Activo: boolean;
+}
