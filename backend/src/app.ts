@@ -41,9 +41,22 @@ app.use((_req: Request, res: Response) => {
 });
 
 // Manejador de errores global (siempre al final, con 4 parámetros)
-app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-    console.error(err);
-    res.status(500).json({ message: 'Error interno del servidor' });
+
+app.use((err: Error & { status?: number; statusCode?: number }, _req: Request, res: Response, _next: NextFunction) => {
+    const status = err.status ?? err.statusCode ?? 500;
+
+    if (status >= 500) {
+        console.error(err);
+        res.status(500).json({ message: 'Error interno del servidor' });
+        return;
+    }
+
+    // Errores del cliente (por ejemplo, JSON mal formado)
+    res.status(status).json({
+        message: status === 400
+            ? 'El cuerpo de la petición no es un JSON válido'
+            : 'Solicitud inválida'
+    });
 });
 
 export default app;
