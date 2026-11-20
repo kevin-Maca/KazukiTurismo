@@ -1,10 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { accommodationsData } from '../data/mockData';
+import { useAccommodations } from '../hooks/useAccommodations';
 import type { Accommodation } from '../types';
 import '../styles/public.css';
 
 export const AccommodationsView: React.FC = () => {
+  const {accommodations, loading, error} = useAccommodations();
+  if (loading) return <p style={{ padding: '2rem' }}>Cargando alojamientos...</p>;
+  if (error) return <p role="alert" style={{ padding: '2rem', color: '#C62828' }}>{error}</p>;
   return (
     <section className="accommodations-section" style={{ padding: '4rem 2rem', maxWidth: '1200px', margin: '0 auto' }}>
       
@@ -41,7 +44,7 @@ export const AccommodationsView: React.FC = () => {
 
       {/* Cuadrícula de Tarjetas de Cabañas */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '2rem' }}>
-        {accommodationsData.map((cab: Accommodation, index: number) => (
+        {accommodations.map((cab: Accommodation, index: number) => (
           <article 
             key={cab.id} 
             style={{ 

@@ -1,11 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar } from '../components';
-import { accommodationsData } from '../data/mockData';
+import { useAccommodations } from '../hooks/useAccommodations';
 import type { Accommodation } from '../types';
 import '../styles/public.css';
 
 export const Home: React.FC = () => {
+  const {accommodations, loading, error} = useAccommodations()
+  if (loading) return <p style={{ padding: '2rem' }}>Cargando alojamientos...</p>;
+  if (error) return <p role="alert" style={{ padding: '2rem', color: '#C62828' }}>{error}</p>;
   return (
     <div>
       <Navbar />
@@ -42,7 +45,7 @@ export const Home: React.FC = () => {
         </p>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
-          {accommodationsData.map((cab: Accommodation) => (
+          {accommodations.map((cab: Accommodation) => (
             <div key={cab.id} style={{ background: 'white', borderRadius: '12px', border: '1px solid var(--border-color)', overflow: 'hidden' }}>
               <img src={cab.image} alt={cab.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
               <div style={{ padding: '1.5rem' }}>
