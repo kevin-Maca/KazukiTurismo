@@ -59,3 +59,64 @@ export interface CapacityConfig {
   reserved: number;
   available: number;
 }
+
+export type Rol = 'ADMIN' | 'VISITANTE';
+
+export interface Usuario {
+  id: number;
+  nombres: string;
+  apellidos: string;
+  correo: string;
+  telefono: string;
+  tipoDocumento: string;
+  numeroDocumento: string;
+  rol: Rol;
+}
+
+export interface RegisterPayload {
+  nombres: string;
+  apellidos: string;
+  correo: string;
+  telefono: string;
+  tipoDocumento: string;
+  numeroDocumento: string;
+  password: string;
+}
+
+export interface FechaDisponibleApi {
+  IdFecha: number;
+  IdAlojamiento: number;
+  Fecha: string;
+  CapacidadTotal: number;
+  CuposReservados: number;
+  Habilitada: boolean;
+}
+
+export interface FechaDisponible {
+  id: number;
+  date: string;       // YYYY-MM-DD
+  capacity: number;
+  reserved: number;
+  available: number;
+  enabled: boolean;
+}
+
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}
+
+export interface AlojamientoApi {
+  IdAlojamiento: number;
+  Nombre: string;
+  Descripcion: string | null;
+  PrecioPorPersonaNoche: number;
+  CapacidadMaxima: number;
+  Activo: boolean;
+}
+
+export interface ApiMessage {
+  success: boolean;
+  message: string;
+}

@@ -1,0 +1,246 @@
+
+/* ================================
+   MI PERFIL - KAZUKI TURISMO
+================================ */
+
+.perfil-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 30px 6% 60px;
+  background: var(--bg-primary, #f6f8f5);
+  color: var(--text-primary, #26332b);
+}
+
+.perfil-header {
+  text-align: center;
+  margin: 25px auto 35px;
+}
+
+.perfil-icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: #e5efe5;
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+}
+
+.perfil-header h1 {
+  font-size: 2.3rem;
+  margin: 0 0 10px;
+  color: #244c36;
+}
+
+.perfil-header p {
+  color: #6c786e;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.perfil-contenedor {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.perfil-card {
+  background: #ffffff;
+  border: 1px solid #e5eae4;
+  border-radius: 18px;
+  padding: 30px;
+  box-shadow: 0 5px 18px rgba(30, 60, 40, 0.06);
+}
+
+.perfil-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.perfil-card-header h2 {
+  color: #244c36;
+  font-size: 1.45rem;
+  margin: 0 0 7px;
+}
+
+.perfil-card-header p {
+  color: #7a857d;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.perfil-icono-seguridad {
+  font-size: 1.6rem;
+  background: #f0f5ed;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.perfil-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.perfil-password-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.perfil-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.perfil-campo label {
+  color: #37483b;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.perfil-campo input {
+  width: 100%;
+  min-height: 45px;
+  padding: 11px 14px;
+  border: 1px solid #d5ded5;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #26332b;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.perfil-campo input:focus {
+  border-color: #50855e;
+  box-shadow: 0 0 0 3px rgba(80, 133, 94, 0.12);
+}
+
+.perfil-campo input.perfil-readonly {
+  background: #f2f4f2;
+  color: #657168;
+  cursor: not-allowed;
+}
+
+.perfil-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 25px;
+}
+
+.perfil-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 12px 22px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.2s, box-shadow 0.2s;
+}
+
+.perfil-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.perfil-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.perfil-btn-primary {
+  background: #356c48;
+  color: #ffffff;
+}
+
+.perfil-btn-primary:hover:not(:disabled) {
+  background: #28563a;
+  box-shadow: 0 4px 12px rgba(53, 108, 72, 0.2);
+}
+
+.perfil-btn-secondary {
+  background: #e8efe8;
+  color: #28563a;
+}
+
+.perfil-btn-secondary:hover:not(:disabled) {
+  background: #d9e6d9;
+}
+
+.perfil-mensaje {
+  margin-top: 20px;
+  padding: 13px 16px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+}
+
+.perfil-error {
+  background: #fff0ef;
+  color: #a83232;
+  border: 1px solid #f1cccc;
+}
+
+.perfil-exito {
+  background: #edf7ef;
+  color: #2f7042;
+  border: 1px solid #cce5d0;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 768px) {
+  .perfil-page {
+    padding: 20px 5% 40px;
+  }
+
+  .perfil-header {
+    margin: 20px auto 25px;
+  }
+
+  .perfil-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .perfil-card {
+    padding: 22px 18px;
+  }
+
+  .perfil-grid,
+  .perfil-password-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .perfil-actions {
+    justify-content: stretch;
+  }
+
+  .perfil-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .perfil-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .perfil-card-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .perfil-card {
+    border-radius: 14px;
+  }
+}
