@@ -1,15 +1,17 @@
-
 import { Router } from 'express';
 import { ReservaController } from '../controllers/reservaController';
+import { authenticate } from '../middlewares/authMiddleware';
 
 const router = Router();
 const reservaController = new ReservaController();
 
 // Crear una reserva
-router.post('/', reservaController.crear);
-// Consultar reservas por usuario
-router.get('/usuario/:idUsuario', reservaController.obtenerPorUsuario);
+router.post('/', authenticate, reservaController.crear);
+
+// Consultar las reservas del usuario autenticado
+router.get('/mis-reservas', authenticate, reservaController.obtenerMisReservas);
+
 // Cancelar una reserva
-router.delete('/:idReserva', reservaController.cancelar);
+router.delete('/:idReserva', authenticate, reservaController.cancelar);
 
 export default router;

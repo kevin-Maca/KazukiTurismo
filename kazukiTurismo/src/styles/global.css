@@ -33,3 +33,337 @@ a {
 button {
   font-family: inherit;
 }
+
+/* MIS RESERVAS */
+
+.mis-reservas {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.mis-reservas h1 {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.reservas-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.reserva-card {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reserva-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.reserva-card h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+.reserva-card p {
+  margin: 12px 0;
+  font-size: 16px;
+  color: #444;
+}
+
+.reserva-card strong {
+  color: #222;
+}
+
+@media (max-width: 600px) {
+  .mis-reservas {
+    padding: 20px 12px;
+  }
+
+  .reserva-card {
+    padding: 18px;
+  }
+}
+
+
+/* FORMATO DE FECHAS Y ESTADOS DE MIS RESERVAS */
+
+.reserva-estado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.estado-reserva {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  margin-left: 8px;
+}
+
+.estado-reserva.pendiente {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.estado-reserva.confirmada {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.estado-reserva.cancelada {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.mensaje-error {
+  color: #b91c1c;
+  text-align: center;
+}
+
+.reservas-vacias {
+  text-align: center;
+  padding: 30px;
+}
+
+
+/* ========================================
+   PAGINA MIS RESERVAS - KAZUKI TURISMO
+======================================== */
+
+.mis-reservas-page {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #f3f5f0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.mis-reservas-container {
+  width: 100%;
+  max-width: 1050px;
+  background: #ffffff;
+  border: 1px solid #dce4da;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 10px 35px rgba(30, 60, 40, 0.08);
+}
+
+.mis-reservas-header {
+  border-bottom: 1px solid #e8ece7;
+  padding-bottom: 25px;
+  margin-bottom: 30px;
+}
+
+.btn-atras-reservas {
+  border: 1px solid #d6dfd5;
+  background: #ffffff;
+  color: #2d4935;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.btn-atras-reservas:hover {
+  background: #eef4ed;
+  transform: translateX(-2px);
+}
+
+.mis-reservas-titulo {
+  text-align: center;
+  margin-top: 25px;
+}
+
+.mis-reservas-icono {
+  display: block;
+  font-size: 35px;
+  margin-bottom: 8px;
+}
+
+.mis-reservas-titulo h1 {
+  color: #263d2c;
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.mis-reservas-titulo p {
+  color: #68776b;
+  font-size: 15px;
+}
+
+.reservas-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.reserva-card {
+  background: #ffffff;
+  border: 1px solid #e0e7df;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 4px 14px rgba(30, 60, 40, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reserva-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 22px rgba(30, 60, 40, 0.10);
+}
+
+.reserva-card-header {
+  text-align: center;
+  border-bottom: 1px solid #edf0ec;
+  padding-bottom: 18px;
+  margin-bottom: 20px;
+}
+
+.reserva-icono {
+  font-size: 30px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.reserva-card-header h2 {
+  color: #2d4935;
+  font-size: 22px;
+  margin: 0;
+}
+
+.reserva-detalles p {
+  margin: 15px 0;
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.reserva-detalles strong {
+  color: #293a2e;
+}
+
+.reserva-estado {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.estado-reserva {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.estado-reserva.pendiente {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.estado-reserva.confirmada {
+  background: #d4edda;
+  color: #155724;
+}
+
+.estado-reserva.cancelada {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.reservas-mensaje {
+  text-align: center;
+  padding: 35px 20px;
+  color: #59675c;
+}
+
+.reservas-error {
+  color: #b91c1c;
+}
+
+.mis-reservas-footer {
+  border-top: 1px solid #e8ece7;
+  margin-top: 35px;
+  padding-top: 20px;
+  text-align: center;
+  color: #718074;
+  font-size: 13px;
+}
+
+.mis-reservas-footer span {
+  font-weight: 700;
+  color: #36563e;
+}
+
+.mis-reservas-footer p {
+  margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+  .mis-reservas-page {
+    padding: 15px 10px;
+  }
+
+  .mis-reservas-container {
+    padding: 20px 15px;
+    border-radius: 16px;
+  }
+
+  .mis-reservas-titulo h1 {
+    font-size: 26px;
+  }
+
+  .reservas-lista {
+    grid-template-columns: 1fr;
+  }
+
+  .reserva-card {
+    padding: 20px;
+  }
+}
+
+
+/* BOTON ATRAS GLOBAL KAZUKI */
+
+.boton-atras-global {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: #ffffff;
+  color: #36563e;
+  border: 1px solid #d6dfd5;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 20px;
+}
+
+.boton-atras-global:hover {
+  background: #eef4ed;
+  border-color: #9db49e;
+  transform: translateX(-2px);
+}
+
+.boton-atras-global:focus-visible {
+  outline: 2px solid #36563e;
+  outline-offset: 3px;
+}

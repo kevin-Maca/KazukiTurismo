@@ -9,7 +9,14 @@ import {
   validatePasswordStrength,
 } from '../services/passwordService';
 import { signToken } from '../services/tokenService';
-import { findByEmail, findById, createUser } from '../repositories/authRepository';
+import {
+  findByEmail,
+  findById,
+  createUser,
+  updateProfile,
+  updatePassword,
+  type ActualizarPerfil,
+} from '../repositories/authRepository';
 
 const registerSchema = z.object({
   nombres: z.string().trim().min(1).max(100),
@@ -24,6 +31,17 @@ const registerSchema = z.object({
 const loginSchema = z.object({
   correo: z.string().trim().toLowerCase().email(),
   password: z.string().min(1),
+});
+
+const updateProfileSchema = z.object({
+  nombres: z.string().trim().min(1).max(100),
+  apellidos: z.string().trim().min(1).max(100),
+  telefono: z.string().trim().regex(/^[0-9+\s-]{7,20}$/, 'Teléfono inválido'),
+});
+
+const changePasswordSchema = z.object({
+  passwordActual: z.string().min(1),
+  nuevaPassword: z.string().min(1),
 });
 
 // Hash de relleno: se compara aunque el correo no exista, para que
@@ -123,15 +141,20 @@ export async function login(req: Request, res: Response): Promise<void> {
 
 export async function me(req: Request, res: Response): Promise<void> {
   const usuario = await findById(req.user!.id);
+
   if (!usuario) {
     res.status(404).json({ message: 'Usuario no encontrado' });
     return;
   }
+
   res.status(200).json({
     id: usuario.IdUsuario,
     nombres: usuario.Nombres,
     apellidos: usuario.Apellidos,
     correo: usuario.Correo,
+    telefono: usuario.Telefono,
+    tipoDocumento: usuario.TipoDocumento,
+    numeroDocumento: usuario.NumeroDocumento,
     rol: usuario.Rol,
   });
 }
@@ -139,4 +162,112 @@ export async function me(req: Request, res: Response): Promise<void> {
 // El JWT es stateless: el logout real lo hace el cliente descartando el token.
 export function logout(_req: Request, res: Response): void {
   res.status(200).json({ message: 'Sesión cerrada' });
+}
+
+// Actualizar datos personales del usuario autenticado
+export async function updateMyProfile(
+  req: Request,
+  res: Response
+): Promise<void> {
+  const parsed = updateProfileSchema.safeParse(req.body);
+
+  if (!parsed.success) {
+    res.status(400).json({
+      message: 'Datos inválidos',
+      errors: parsed.error.issues.map((i) => ({
+        campo: i.path.join('.'),
+        mensaje: i.message,
+      })),
+    });
+    return;
+  }
+
+  const actualizado = await updateProfile(req.user!.id, parsed.data);
+
+  if (!actualizado) {
+    res.status(404).json({ message: 'Usuario no encontrado' });
+    return;
+  }
+
+  const usuario = await findById(req.user!.id);
+
+  if (!usuario) {
+    res.status(404).json({ message: 'Usuario no encontrado' });
+    return;
+  }
+
+  res.status(200).json({
+    message: 'Perfil actualizado correctamente',
+    usuario: {
+      id: usuario.IdUsuario,
+      nombres: usuario.Nombres,
+      apellidos: usuario.Apellidos,
+      correo: usuario.Correo,
+      telefono: usuario.Telefono,
+      tipoDocumento: usuario.TipoDocumento,
+      numeroDocumento: usuario.NumeroDocumento,
+      rol: usuario.Rol,
+    },
+  });
+}
+
+// Cambiar contraseña del usuario autenticado
+export async function changeMyPassword(
+  req: Request,
+  res: Response
+): Promise<void> {
+  const parsed = changePasswordSchema.safeParse(req.body);
+
+  if (!parsed.success) {
+    res.status(400).json({
+      message: 'Datos inválidos',
+      errors: parsed.error.issues.map((i) => ({
+        campo: i.path.join('.'),
+        mensaje: i.message,
+      })),
+    });
+    return;
+  }
+
+  const { passwordActual, nuevaPassword } = parsed.data;
+
+  const usuario = await findById(req.user!.id);
+
+  if (!usuario || !usuario.PasswordHash) {
+    res.status(404).json({ message: 'Usuario no encontrado' });
+    return;
+  }
+
+  const passwordActualValida = await comparePassword(
+    passwordActual,
+    usuario.PasswordHash
+  );
+
+  if (!passwordActualValida) {
+    res.status(401).json({ message: 'La contraseña actual es incorrecta' });
+    return;
+  }
+
+  const passwordErrors = validatePasswordStrength(nuevaPassword);
+
+  if (passwordErrors.length > 0) {
+    res.status(400).json({
+      message: 'La nueva contraseña no cumple los requisitos de seguridad',
+      errors: passwordErrors,
+    });
+    return;
+  }
+
+  const passwordHash = await hashPassword(nuevaPassword);
+
+  const actualizado = await updatePassword(req.user!.id, passwordHash);
+
+  if (!actualizado) {
+    res.status(404).json({ message: 'Usuario no encontrado' });
+    return;
+  }
+
+  res.status(200).json({
+    message: 'Contraseña actualizada correctamente',
+  });
 }

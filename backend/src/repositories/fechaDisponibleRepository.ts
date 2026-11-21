@@ -39,6 +39,7 @@ export class FechaDisponibleRepository {
         return resultado.recordset as FechaDisponible[];
     }
 
+    
     // Registrar una fecha individual o un rango de fechas
     async registrarRango(
         idAlojamiento: number,
@@ -57,7 +58,6 @@ export class FechaDisponibleRepository {
 
             const inicio = new Date(`${fechaInicio}T00:00:00`);
             const fin = new Date(`${fechaFin}T00:00:00`);
-
             const fechaActual = new Date(inicio);
 
             while (fechaActual <= fin) {
@@ -68,28 +68,74 @@ export class FechaDisponibleRepository {
                     fechaActual.getDate()
                 );
 
-                await new sql.Request(transaction)
+                const resultado = await new sql.Request(transaction)
                     .input('idAlojamiento', sql.Int, idAlojamiento)
                     .input('fecha', sql.Date, fechaSQL)
                     .input('capacidadTotal', sql.Int, capacidadTotal)
                     .query(`
-                        INSERT INTO FECHAS_DISPONIBLES (
-                            IdAlojamiento,
-                            Fecha,
-                            CapacidadTotal,
-                            CuposReservados,
-                            Habilitada
+                        IF EXISTS (
+                            SELECT 1
+                            FROM FECHAS_DISPONIBLES WITH (UPDLOCK, HOLDLOCK)
+                            WHERE IdAlojamiento = @idAlojamiento
+                              AND Fecha = @fecha
                         )
-                        VALUES (
-                            @idAlojamiento,
-                            @fecha,
-                            @capacidadTotal,
-                            0,
-                            1
-                        );
+                        BEGIN
+                            IF EXISTS (
+                                SELECT 1
+                                FROM FECHAS_DISPONIBLES
+                                WHERE IdAlojamiento = @idAlojamiento
+                                  AND Fecha = @fecha
+                                  AND Habilitada = 0
+                            )
+                            BEGIN
+                                IF @capacidadTotal < (
+                                    SELECT CuposReservados
+                                    FROM FECHAS_DISPONIBLES
+                                    WHERE IdAlojamiento = @idAlojamiento
+                                      AND Fecha = @fecha
+                                )
+                                BEGIN
+                                    THROW 50001, 'La capacidad no puede ser inferior a los cupos reservados.', 1;
+                                END;
+
+                                UPDATE FECHAS_DISPONIBLES
+                                SET CapacidadTotal = @capacidadTotal,
+                                    Habilitada = 1
+                                WHERE IdAlojamiento = @idAlojamiento
+                                  AND Fecha = @fecha
+                                  AND Habilitada = 0;
+
+                                SELECT 1 AS Registrada;
+                            END
+                            ELSE
+                            BEGIN
+                                SELECT 0 AS Registrada;
+                            END
+                        END
+                        ELSE
+                        BEGIN
+                            INSERT INTO FECHAS_DISPONIBLES (
+                                IdAlojamiento,
+                                Fecha,
+                                CapacidadTotal,
+                                CuposReservados,
+                                Habilitada
+                            )
+                            VALUES (
+                                @idAlojamiento,
+                                @fecha,
+                                @capacidadTotal,
+                                0,
+                                1
+                            );
+
+                            SELECT 1 AS Registrada;
+                        END;
                     `);
 
-                cantidadRegistrada++;
+                if (resultado.recordset[0].Registrada === 1) {
+                    cantidadRegistrada++;
+                }
 
                 fechaActual.setDate(fechaActual.getDate() + 1);
             }

@@ -15,7 +15,24 @@ export class ReservaController {
 
         try {
 
-            const resultado = await this.reservaService.crear(req.body);
+                if (!req.user) {
+        res.status(401).json({
+            mensaje: 'Usuario no autenticado'
+        });
+        return;
+    }
+
+    const datosReserva = {
+        IdUsuario: req.user.id,
+        IdAlojamiento: Number(req.body.idAlojamiento ?? req.body.IdAlojamiento),
+        FechaEntrada: req.body.fechaEntrada ?? req.body.FechaEntrada,
+        FechaSalida: req.body.fechaSalida ?? req.body.FechaSalida,
+        CantidadVisitantes: Number(
+            req.body.cantidadVisitantes ?? req.body.CantidadVisitantes
+        )
+    };
+
+    const resultado = await this.reservaService.crear(datosReserva);
 
             switch (resultado.resultado) {
 
@@ -77,6 +94,33 @@ export class ReservaController {
                 mensaje: 'Reservas consultadas exitosamente',
                 reservas
             });
+        } catch (error) {
+            res.status(400).json({
+                mensaje: error instanceof Error
+                    ? error.message
+                    : 'Error al consultar las reservas'
+            });
+        }
+    };
+
+            obtenerMisReservas = async (req: Request, res: Response): Promise<void> => {
+        try {
+            if (!req.user) {
+                res.status(401).json({
+                    mensaje: 'Usuario no autenticado'
+                });
+                return;
+            }
+
+            const idUsuario = Number(req.user.id);
+
+            const reservas = await this.reservaService.obtenerPorUsuario(idUsuario);
+
+            res.status(200).json({
+                mensaje: 'Mis reservas consultadas exitosamente',
+                reservas
+            });
+
         } catch (error) {
             res.status(400).json({
                 mensaje: error instanceof Error

@@ -13,6 +13,8 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import './styles/global.css';
+import { MisReservas } from './pages/MisReservas';
+import { MiPerfil } from './pages/MiPerfil';
 
 function App() {
   return (
@@ -30,9 +32,11 @@ function App() {
 
   {/* Requiere sesión (VISITANTE o ADMIN) */}
   <Route element={<ProtectedRoute />}>
-    <Route path="/reserva/datos" element={<VisitorForm />} />
-    <Route path="/reserva/pago" element={<Payment />} />
-    <Route path="/reserva/confirmacion" element={<Confirmation />} />
+  <Route path="/reserva/datos" element={<VisitorForm />} />
+  <Route path="/reserva/pago" element={<Payment />} />
+  <Route path="/reserva/confirmacion" element={<Confirmation />} />
+  <Route path="/mis-reservas" element={<MisReservas />} />
+  <Route path="/mi-perfil" element={<MiPerfil />} />
   </Route>
 
   {/* Solo ADMIN */}

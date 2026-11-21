@@ -6,6 +6,26 @@ interface LoginResponse {
   usuario: Usuario;
 }
 
+export interface UpdateProfilePayload {
+  nombres: string;
+  apellidos: string;
+  telefono: string;
+}
+
+export interface ChangePasswordPayload {
+  passwordActual: string;
+  nuevaPassword: string;
+}
+
+interface ProfileResponse {
+  message: string;
+  usuario: Usuario;
+}
+
+interface ChangePasswordResponse {
+  message: string;
+}
+
 export const authService = {
   login: (correo: string, password: string) =>
     request<LoginResponse>('/api/auth/login', {
@@ -22,6 +42,18 @@ export const authService = {
     }),
 
   me: () => request<Usuario>('/api/auth/me'),
+
+  updateProfile: (data: UpdateProfilePayload) =>
+    request<ProfileResponse>('/api/auth/profile', {
+      method: 'PUT',
+      body: data,
+    }),
+
+  changePassword: (data: ChangePasswordPayload) =>
+    request<ChangePasswordResponse>('/api/auth/change-password', {
+      method: 'PUT',
+      body: data,
+    }),
 
   logout: () => request<{ message: string }>('/api/auth/logout', { method: 'POST' }),
 };

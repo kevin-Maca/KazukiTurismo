@@ -5,6 +5,7 @@ import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import alojamientoRoutes from './routes/alojamientoRoutes';
 import authRoutes from './routes/authRoutes'
+import pagoRoutes from './routes/pagoRoutes';
 
 const app: Application = express();
 
@@ -18,6 +19,7 @@ app.use('/api/fechas-disponibles', fechaDisponibleRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/reservas', reservaRoutes);
+app.use('/api/pagos', pagoRoutes);
 
 // Ruta principal
 app.get('/', (req, res) => {

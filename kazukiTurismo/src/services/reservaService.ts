@@ -1,17 +1,30 @@
 import { request } from './apiClient';
-import type { ApiResponse } from '../types';
 
 export interface CrearReservaPayload {
   idAlojamiento: number;
-  fechaEntrada: string;   // YYYY-MM-DD
-  fechaSalida: string;    // YYYY-MM-DD
+  fechaEntrada: string;
+  fechaSalida: string;
   cantidadVisitantes: number;
 }
 
 export interface ReservaCreada {
   IdReserva: number;
+  IdUsuario: number;
+  IdAlojamiento: number;
+  FechaEntrada: string;
+  FechaSalida: string;
+  CantidadVisitantes: number;
   Estado: string;
-  Total: number;
+  FechaCreacion: string;
+}
+
+export interface ReservaUsuario extends ReservaCreada {
+  NombreAlojamiento: string;
+}
+
+interface ReservaResponse {
+  mensaje: string;
+  reserva: ReservaCreada;
 }
 
 export interface RegistrarPagoPayload {
@@ -25,22 +38,35 @@ export interface PagoRegistrado {
   Estado: string;
 }
 
+interface PagoResponse {
+  mensaje: string;
+  pago: PagoRegistrado;
+}
+
+interface MisReservasResponse {
+  mensaje: string;
+  reservas: ReservaUsuario[];
+}
+
 export const reservaService = {
-  // Crea la reserva del usuario autenticado (el IdUsuario sale del token en el backend)
   create: async (data: CrearReservaPayload): Promise<ReservaCreada> => {
-    const res = await request<ApiResponse<ReservaCreada>>('/api/reservas', {
+    const res = await request<ReservaResponse>('/api/reservas', {
       method: 'POST',
       body: data,
     });
-    return res.data;
+    return res.reserva;
   },
 
-  // Registra la transferencia; el pago queda PENDIENTE hasta que un ADMIN lo apruebe
+    getMyReservations: async (): Promise<ReservaUsuario[]> => {
+    const res = await request<MisReservasResponse>('/api/reservas/mis-reservas');
+    return res.reservas;
+  },
+
   registerPayment: async (data: RegistrarPagoPayload): Promise<PagoRegistrado> => {
-    const res = await request<ApiResponse<PagoRegistrado>>('/api/pagos', {
+    const res = await request<PagoResponse>('/api/pagos', {
       method: 'POST',
       body: data,
     });
-    return res.data;
+    return res.pago;
   },
 };

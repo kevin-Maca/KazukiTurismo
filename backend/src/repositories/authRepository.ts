@@ -7,6 +7,9 @@ export interface UsuarioAuth {
   Nombres: string;
   Apellidos: string;
   Correo: string;
+  Telefono: string;
+  TipoDocumento: string;
+  NumeroDocumento: string;
   Rol: 'ADMIN' | 'VISITANTE';
   PasswordHash: string | null;
   Activo: boolean;
@@ -22,8 +25,14 @@ export interface NuevoUsuario {
   passwordHash: string;
 }
 
+export interface ActualizarPerfil {
+  nombres: string;
+  apellidos: string;
+  telefono: string;
+}
+
 const COLUMNAS =
-  'IdUsuario, Nombres, Apellidos, Correo, Rol, PasswordHash, Activo';
+  'IdUsuario, Nombres, Apellidos, Correo, Telefono, TipoDocumento, NumeroDocumento, Rol, PasswordHash, Activo';
 
 export async function findByEmail(correo: string): Promise<UsuarioAuth | null> {
   const pool = await connectDB();
@@ -69,3 +78,46 @@ export async function createUser(
     `);
   return result.recordset[0].IdUsuario;
 }
+
+export async function updateProfile(
+  id: number,
+  data: ActualizarPerfil
+): Promise<boolean> {
+  const pool = await connectDB();
+
+  const result = await pool
+    .request()
+    .input('id', sql.Int, id)
+    .input('nombres', sql.NVarChar(100), data.nombres)
+    .input('apellidos', sql.NVarChar(100), data.apellidos)
+    .input('telefono', sql.NVarChar(20), data.telefono)
+    .query(`
+      UPDATE dbo.USUARIOS
+      SET Nombres = @nombres,
+          Apellidos = @apellidos,
+          Telefono = @telefono
+      WHERE IdUsuario = @id
+    `);
+
+  return result.rowsAffected[0] > 0;
+}
+
+export async function updatePassword(
+  id: number,
+  passwordHash: string
+): Promise<boolean> {
+  const pool = await connectDB();
+
+  const result = await pool
+    .request()
+    .input('id', sql.Int, id)
+    .input('passwordHash', sql.NVarChar(255), passwordHash)
+    .query(`
+      UPDATE dbo.USUARIOS
+      SET PasswordHash = @passwordHash
+      WHERE IdUsuario = @id
+    `);
+
+  return result.rowsAffected[0] > 0;
+}
+
