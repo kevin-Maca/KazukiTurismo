@@ -80,6 +80,24 @@ export interface RegisterPayload {
   password: string;
 }
 
+export interface FechaDisponibleApi {
+  IdFecha: number;
+  IdAlojamiento: number;
+  Fecha: string;
+  CapacidadTotal: number;
+  CuposReservados: number;
+  Habilitada: boolean;
+}
+
+export interface FechaDisponible {
+  id: number;
+  date: string;       // YYYY-MM-DD
+  capacity: number;
+  reserved: number;
+  available: number;
+  enabled: boolean;
+}
+
 export interface ApiResponse<T> {
   success: boolean;
   message: string;
@@ -93,4 +111,9 @@ export interface AlojamientoApi {
   PrecioPorPersonaNoche: number;
   CapacidadMaxima: number;
   Activo: boolean;
+}
+
+export interface ApiMessage {
+  success: boolean;
+  message: string;
 }
