@@ -2,6 +2,12 @@
 
 Sistema web de turismo rural comunitario que permite a los visitantes consultar alojamientos, verificar disponibilidad, realizar reservas y registrar pagos por transferencia bancaria, promoviendo el turismo sostenible y el apoyo a las comunidades locales.
 
+## Integrantes
+YULI AVILEZ GAZCON 
+KEVIN ANDRÉS MACA MONSALVE 
+SERGIO ANDRES GONZALEZ ALMANZA 
+JUAN FELIPE USUGA 
+
 ## Descripción del proyecto
 
 Kazuki Turismo es una aplicación web desarrollada para facilitar la gestión de alojamientos rurales, fechas disponibles, cupos y reservas de visitantes.
