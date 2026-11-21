@@ -1,113 +1,90 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Navbar } from '../components/Navbar';
 import { BookingStepper } from '../components/BookingStepper';
 import { BookingSummaryCard } from '../components/BookingSummaryCard';
-import { accommodationsData } from '../data/mockData';
+import { useAuth } from '../context/useAuth';
+import { useSelectedAccommodation } from '../hooks/useSelectedAccommodation';
+import { listNights } from '../services/fechaService';
 import '../styles/public.css';
 
 export const VisitorForm: React.FC = () => {
   const navigate = useNavigate();
-    const selectedCabin =
-    accommodationsData.find(
-      (cabin) => cabin.id === sessionStorage.getItem('selectedCabinId')
-    ) ?? accommodationsData[0];
+  const { user } = useAuth();
+  const { selectedCabin, loading, error } = useSelectedAccommodation();
 
-  const visitors = Number(sessionStorage.getItem('visitors') ?? 2);
+  const visitors = Number(sessionStorage.getItem('visitors') ?? 0);
   const checkInDate = sessionStorage.getItem('checkInDate') ?? '';
   const checkOutDate = sessionStorage.getItem('checkOutDate') ?? '';
 
-  const nights =
-    checkInDate && checkOutDate
-      ? (Date.parse(`${checkOutDate}T00:00:00Z`) -
-          Date.parse(`${checkInDate}T00:00:00Z`)) /
-        86_400_000
-      : 1;
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
+  if (loading) return <p style={{ padding: '2rem' }}>Cargando...</p>;
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-    sessionStorage.setItem('guestInfo', JSON.stringify({ firstName, lastName, email, phone }));
-    navigate('/reserva/pago');
-  };
+  if (error) {
+    return (
+      <p role="alert" style={{ padding: '2rem', color: '#C62828' }}>
+        {error}
+      </p>
+    );
+  }
+
+  if (!selectedCabin || !checkInDate || !checkOutDate || visitors < 1) {
+    return <Navigate to="/reserva" replace />;
+  }
+
+  const nights = listNights(checkInDate, checkOutDate).length;
 
   return (
     <div>
       <Navbar />
       <BookingStepper currentStep={2} />
+
       <div className="booking-layout">
         <div className="booking-form-box">
           <small style={{ color: 'var(--text-muted)', fontWeight: 700 }}>PASO 2 DE 4</small>
-          <h2>Cuéntanos sobre ti</h2>
-          <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>Usaremos estos datos para gestionar tu reserva.</p>
+          <h2>Confirma tus datos</h2>
+          <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
+            La reserva quedará a nombre de tu cuenta.
+          </p>
 
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-              <div>
-                <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Nombre</label>
-                <input 
-                  type="text" 
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  placeholder="Ej. María" 
-                  required 
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', border: '1px solid var(--border-color)', marginTop: '4px' }} 
-                />
-              </div>
-              <div>
-                <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Apellidos</label>
-                <input 
-                  type="text" 
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  placeholder="Ej. Rodríguez" 
-                  required 
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', border: '1px solid var(--border-color)', marginTop: '4px' }} 
-                />
-              </div>
-            </div>
+          <dl
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'auto 1fr',
+              gap: '0.6rem 1.5rem',
+              margin: 0,
+            }}
+          >
+            <dt style={{ fontWeight: 600 }}>Nombre</dt>
+            <dd style={{ margin: 0 }}>
+              {user?.nombres} {user?.apellidos}
+            </dd>
+            <dt style={{ fontWeight: 600 }}>Correo</dt>
+            <dd style={{ margin: 0 }}>{user?.correo}</dd>
+          </dl>
 
-            <div>
-              <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Correo electrónico</label>
-              <input 
-                type="email" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="nombre@correo.com" 
-                required 
-                style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', border: '1px solid var(--border-color)', marginTop: '4px' }} 
-              />
-            </div>
-
-            <div>
-              <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Teléfono</label>
-              <input 
-                type="tel" 
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="+57 300 000 0000" 
-                required 
-                style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', border: '1px solid var(--border-color)', marginTop: '4px' }} 
-              />
-            </div>
-
-            <button type="submit" className="btn-primary" style={{ width: '100%', padding: '0.85rem', marginTop: '1rem' }}>
-              Confirmar datos y continuar &rarr;
+          <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+            <button type="button" className="btn-secondary" onClick={() => navigate('/reserva')}>
+              &larr; Cambiar fechas
             </button>
-          </form>
+            <button
+              type="button"
+              className="btn-primary"
+              style={{ flex: 1, padding: '0.85rem' }}
+              onClick={() => navigate('/reserva/pago')}
+            >
+              Continuar al pago &rarr;
+            </button>
+          </div>
         </div>
 
         <div>
           <BookingSummaryCard
-  visitors={visitors}
-  selectedCabin={selectedCabin}
-  checkInDate={checkInDate}
-  checkOutDate={checkOutDate}
-  nights={nights}
-/>
+            visitors={visitors}
+            selectedCabin={selectedCabin}
+            checkInDate={checkInDate}
+            checkOutDate={checkOutDate}
+            nights={nights}
+          />
         </div>
       </div>
     </div>
